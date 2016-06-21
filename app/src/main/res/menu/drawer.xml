@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/account"
+            android:checked="false"
+            android:icon="@drawable/ic_account_box_black"
+            android:title="Profil" />
+
+        <item
+            android:id="@+id/repo"
+            android:checked="false"
+            android:icon="@drawable/ic_drafts_black"
+            android:title="Projets" />
+
+        <item
+            android:id="@+id/infos"
+            android:checked="false"
+            android:icon="@drawable/ic_send_black"
+            android:title="Infos" />
+
+    </group>
+</menu>
