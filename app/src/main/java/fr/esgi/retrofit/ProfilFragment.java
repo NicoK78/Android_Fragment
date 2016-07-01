@@ -17,8 +17,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by Nico on 14/06/16.
  */
-public class ProfilFragment extends Fragment{
+public class ProfilFragment extends Fragment {
 
+    public static final String MY_USER = "MyUser";
     @BindView(R.id.avatarUrl)
     CircleImageView avatarUrl;
     @BindView(R.id.name)
@@ -28,25 +29,18 @@ public class ProfilFragment extends Fragment{
 
     User user;
 
-     public static ProfilFragment newInstance(User myUser){
-
-         ProfilFragment myProfil = new ProfilFragment();
-
-         Bundle args = new Bundle();
-         args.putSerializable("MyUser", myUser);
-         myProfil.setArguments(args);
-         return myProfil;
-     }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public static ProfilFragment newInstance(User myUser) {
+        ProfilFragment myProfil = new ProfilFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(MY_USER, myUser);
+        myProfil.setArguments(args);
+        return myProfil;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.profile_fragment,container,false);
+        View v = inflater.inflate(R.layout.profile_fragment, container, false);
         ButterKnife.bind(this, v);
 
         return v;
@@ -57,11 +51,11 @@ public class ProfilFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        user = (User) this.getArguments().getSerializable("MyUser");
+        user = (User) this.getArguments().getSerializable(MY_USER);
 
         Glide.with(avatarUrl.getContext())
-                .load(user.getAvatarUrl())
-                .into(avatarUrl);
+            .load(user.getAvatarUrl())
+            .into(avatarUrl);
         pseudo.setText(user.getLogin());
         name.setText(user.getName());
     }
