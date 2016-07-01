@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,21 +23,19 @@ import retrofit2.Response;
  */
 public class LoginController extends AppCompatActivity {
 
+    public static final String PSEUDO = "pseudo";
+
     @BindView(R.id.userlogin)
     TextView userlogin;
     @BindView(R.id.username)
     TextView username;
     @BindView(R.id.profile_image)
     de.hdodenhof.circleimageview.CircleImageView profileImage;
-
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private DrawerLayout drawerLayout;
-
-
     GitHubService service;
     User user;
-    List<Repo> repos;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.navigation_view) NavigationView navigationView;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,30 +44,28 @@ public class LoginController extends AppCompatActivity {
 
         service = GithubWebService.get();
 
-
-        final String pseudo = getIntent().getStringExtra("pseudo");
+        final String pseudo = getIntent().getStringExtra(PSEUDO); //Corrections utiliser la constante PSEUDO
         loadUser(pseudo);
         user = (User) getIntent().getSerializableExtra("MyUser");
 
-
         // Initializing Toolbar and setting it as the actionbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //Initializing NavigationView
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
-                if(menuItem.isChecked()) menuItem.setChecked(false);
-                else menuItem.setChecked(true);
+                if (menuItem.isChecked()) {
+                    menuItem.setChecked(false);
+                } else {
+                    menuItem.setChecked(true);
+                }
 
                 drawerLayout.closeDrawers();
 
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
 
                     case R.id.account:
                         Toast.makeText(getApplicationContext(), "Account Selected", Toast.LENGTH_SHORT).show();
@@ -86,34 +80,33 @@ public class LoginController extends AppCompatActivity {
                         userlogin = (TextView) findViewById(R.id.userlogin);
                         userlogin.setText(user.getLogin());
 
-
                         ProfilFragment profilFragment = ProfilFragment.newInstance(user);
                         getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.frame,profilFragment)
+                            .replace(R.id.frame, profilFragment)
                             .commit();
 
                         return true;
 
                     case R.id.repo:
-                        Toast.makeText(getApplicationContext(),"Repo Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Repo Selected", Toast.LENGTH_SHORT).show();
 
                         ReposFragment reposFragment = ReposFragment.newInstance(user);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.frame, reposFragment)
-                                .commit();
+                            .replace(R.id.frame, reposFragment)
+                            .commit();
 
                         return true;
                     case R.id.infos:
-                        Toast.makeText(getApplicationContext(),"Infos Selected",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Infos Selected", Toast.LENGTH_SHORT).show();
 
                         InfosFragment infosFragment = InfosFragment.newInstance(pseudo);
                         getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.frame, infosFragment)
-                                .commit();
+                            .replace(R.id.frame, infosFragment)
+                            .commit();
 
                         return true;
                     default:
-                        Toast.makeText(getApplicationContext(),"Somethings Wrong",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         return true;
 
                 }
@@ -122,7 +115,7 @@ public class LoginController extends AppCompatActivity {
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer, R.string.closeDrawer){
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -157,7 +150,7 @@ public class LoginController extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected Boolean loadUser(final String name){
+    protected Boolean loadUser(final String name) {
         service.getUser(name).enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

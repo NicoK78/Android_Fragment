@@ -15,6 +15,8 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String MY_USER = "MyUser";
+    public static final String PSEUDO = "pseudo";
     @BindView(R.id.askpseudo)
     TextView askpseudo;
     @BindView(R.id.pseudo)
@@ -22,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.send)
     Button send;
 
-    GitHubService service;
-    User myUser;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +32,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-
-//        service = GithubWebService.get();
+        sharedpreferences = getSharedPreferences(MY_USER, Context.MODE_PRIVATE);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                SharedPreferences sharedpreferences = getSharedPreferences("MyUser", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString("pseudo", pseudo.getText().toString());
-                editor.commit();
-
+                //Correction inline & .apply()
+                sharedpreferences.edit()
+                    .putString(PSEUDO, pseudo.getText().toString())
+                    .apply();
 
                 Intent intent = new Intent(MainActivity.this, LoginController.class);
-                intent.putExtra("pseudo", pseudo.getText().toString());
-
+                intent.putExtra(LoginController.PSEUDO, pseudo.getText().toString()); //Correction sontante LoginController.PSEUDO
                 startActivity(intent);
             }
         });
@@ -59,50 +57,11 @@ public class MainActivity extends AppCompatActivity {
         askpseudo.setText("Entrez votre pseudo :");
         send.setText("Valider");
 
-        SharedPreferences prefs = getSharedPreferences("MyUser", MODE_PRIVATE);
-        String userPseudo = prefs.getString("pseudo", "");
+        String userPseudo = sharedpreferences.getString(PSEUDO, "");
 
-        if (userPseudo != "") {
+        if (!"".equals(userPseudo)) { //Correction pas de != sur les strings
             pseudo.setText(userPseudo);
         }
 
-//        displayUser(null);
     }
-
-/*    protected Boolean loadUser(final String name){
-        Log.d("IN LOADUSER "+name, "ACTIVITY");
-        service.getUser(name).enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Log.d("IN onResponse " + name, "ACTIVITY");
-                User user = response.body();
-                displayUser(user);
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Log.e("retrofit", "failure" + t);
-            }
-        });
-        return true;
-    }
-
-    protected void displayUser(User user){
-        askpseudo.setText("Entrez votre pseudo :");
-        send.setText("Valider");
-
-        if(user != null) {
-            Log.d("=> " + user.getLogin() + " " + user.getName() + " " + user.getFollowers(), "ACTIVITYDEOUF");
-            myUser = new User(user.getName(), user.getLogin(), user.getAvatarUrl(), user.getFollowers());
-            Log.d("=> " + myUser.getLogin() + " " + myUser.getName() + " " + myUser.getFollowers(), "ACTIVITYDEOUF");
-        }
-
-        SharedPreferences prefs = getSharedPreferences("MyUser", MODE_PRIVATE);
-        String userPseudo = prefs.getString("pseudo", "");
-
-        if (userPseudo != "") {
-            pseudo.setText(userPseudo);
-
-        }
-    }*/
 }

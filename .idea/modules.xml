@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/TD4_NKERVOERN.iml" filepath="$PROJECT_DIR$/TD4_NKERVOERN.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Android_Fragment.iml" filepath="$PROJECT_DIR$/Android_Fragment.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

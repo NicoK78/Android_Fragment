@@ -23,6 +23,7 @@ import retrofit2.Response;
  */
 public class ReposFragment extends Fragment {
 
+    public static final String MY_USER = "MyUser";
     User user;
     List<Repo> repos;
 
@@ -33,11 +34,9 @@ public class ReposFragment extends Fragment {
     MyAdapter myAdapter;
 
     public static ReposFragment newInstance(User myUser){
-
         ReposFragment myRepos = new ReposFragment();
-
         Bundle args = new Bundle();
-        args.putSerializable("MyUser", myUser);
+        args.putSerializable(MY_USER, myUser);
         myRepos.setArguments(args);
         return myRepos;
     }
@@ -45,21 +44,18 @@ public class ReposFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.repos_fragment,container,false);
-
-        ButterKnife.bind(this, v);
-
-        user = (User) this.getArguments().getSerializable("MyUser");
-        loadRepos(user.getLogin());
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(v.getContext()));
-
-        return v;
+        return inflater.inflate(R.layout.repos_fragment,container,false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ButterKnife.bind(this, view);
+
+        user = (User) this.getArguments().getSerializable(MY_USER);
+        loadRepos(user.getLogin());
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     protected Boolean loadRepos(final String name) {

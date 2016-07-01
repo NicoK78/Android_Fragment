@@ -13,14 +13,13 @@ import android.view.ViewGroup;
  */
 public class InfosFragment extends Fragment {
 
-    public static InfosFragment newInstance(String userName){
-        String pseudo = userName;
-        InfosFragment myRepos = new InfosFragment();
+    public static final String PSEUDO = "pseudo";
 
+    public static InfosFragment newInstance(String userName){
+        InfosFragment myRepos = new InfosFragment();
         Bundle args = new Bundle();
-        args.putString("pseudo", pseudo);
+        args.putString(PSEUDO, userName);
         myRepos.setArguments(args);
-        Log.d(pseudo, "LOG");
         return myRepos;
     }
 
